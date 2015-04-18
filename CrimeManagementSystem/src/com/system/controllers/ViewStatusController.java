@@ -23,8 +23,13 @@ public class ViewStatusController extends SystemAbstractController {
 		
 		ModelAndView modelAndView = new ModelAndView("viewstatus");
 		String typeRequest = request.getParameter("requestType");
+		String from = request.getParameter("from");
 		if (loginBean.getType().equals(SystemConstants.ROLE_ADMIN) &&typeRequest != null && typeRequest.equalsIgnoreCase("approve")) {
-			modelAndView = new ModelAndView("approvestatus");
+			if (from != null && from.equalsIgnoreCase("View")) {
+				modelAndView = new ModelAndView("viewstatus");
+			} else {
+				modelAndView = new ModelAndView("approvestatus");
+			}
 			request.setAttribute("statusList", service.getCrimeDetailsAdmin());
 		} else {
 			request.setAttribute("statusList", service.getCrimeDetailsUser(loginBean.getUserName()));

@@ -4,8 +4,6 @@
 	<head>
 		<title><spring:message code="html.login.label.login.title"/> </title>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<script type="text/javascript" language="javascript" src="dwr/util.js"> </script>
-		<script type="text/javascript" language="javascript" src="dwr/engine.js"></script>
 		<jsp:include flush="true" page="libjs.jsp"></jsp:include>
 		
 		<script type="text/javascript" language="javaScript">
@@ -46,7 +44,8 @@
 			 		modal: true,
 			 	  	width: 460,
 			 	  	buttons: {
-				 	  	Update: function() {
+				 	  	Delete: function() {
+				 	  		alert(document.getElementById("deleterequestId").value);
 		                	var ctx = "${pageContext.request.contextPath}"+"/deleterequest.view";
 		   					document.getElementById("deleteForm").action = ctx;
 		   					document.getElementById("deleteFormsubmitButton").click();
@@ -95,52 +94,49 @@
 			});
 			
 			function populateValue(row) {
-				
-				document.getElementById("invoiceNumber").value = document.getElementById("invoice"+row).innerHTML;
-				document.getElementById("amount").value = document.getElementById("amount"+row).innerHTML ;
-				document.getElementById("billDate").value =document.getElementById("date"+row).innerHTML;
-				document.getElementById("type").value = document.getElementById("type"+row).innerHTML;
+				document.getElementById("typeofcrime").value = document.getElementById("typeofcrime"+row).innerHTML;
+				document.getElementById("description").value =document.getElementById("description"+row).innerHTML;
+				document.getElementById("suspectDetails").value = document.getElementById("suspectDetails"+row).innerHTML;
 				document.getElementById("requestId").value = document.getElementById("requestId"+row).value;
+				document.getElementById("notes").value = document.getElementById("notes"+row).innerHTML;
+				document.getElementById("status").value = document.getElementById("status"+row).innerHTML;
 				
+				 $("#crimedate").val(document.getElementById("crimedate"+row).innerHTML);
 				
 				$("#requestEditDiv").dialog('option', 'modal', true).dialog('open');
 			}
 			
 			function clearFeilds() {
 				$(".error").hide();
-				document.getElementById("invoiceNumber").value = '';
-				document.getElementById("amount").value = '' ;
-				document.getElementById("billDate").value = '';
-				document.getElementById("type").value = '';
-				document.getElementById("requestId").value = "";
+				document.getElementById("typeofcrime").value = '';
+				document.getElementById("description").value = '';
+				document.getElementById("suspectDetails").value = '';
 				document.getElementById("notes").value = "";
+				document.getElementById("status").value = "";
+				document.getElementById("requestId").value = "";
 			}
 			
 			function validate() {
-				var invoice = document.getElementById("invoiceNumber").value;
-				var amount = document.getElementById("amount").value;
-				var date = document.getElementById("billDate").value;
-				var type = document.getElementById("type").value;
+				var typeofcrime = document.getElementById("typeofcrime").value;
+				var crimedate = document.getElementById("crimedate").value;
+				var description = document.getElementById("description").value;
+				var suspectDetails = document.getElementById("suspectDetails").value;
 				var notes = document.getElementById("notes").value;
 				var hasError = false;
-				if (invoice == '') {
-					$("#invoiceNumber").after("<br class='error'><span class='error'><spring:message code='html.request.error.invocenumber' /></span>");
+				if (typeofcrime == '') {
+					$("#typeofcrime").after("<br class='error'><span class='error'><spring:message code='html.request.error.typeofcrime' /></span>");
 					hasError = true;
 				}
-				if (amount == '') {
-					$("#amount").after("<br class='error'><span class='error'><spring:message code='html.request.error.amount' /></span>");
-					hasError = true;
-				}
-				
-				if (date == '') {
-					$("#billDate").after("<br class='error'><span class='error'><spring:message code='html.request.error.billdate' /></span>");
+				if (crimedate == '') {
+					$("#crimedate").after("<br class='error'><span class='error'><spring:message code='html.request.error.crimedate' /></span>");
 					hasError = true;
 				}
 				
-				if (type == '') {
-					$("#type").after("<br class='error'><span class='error'><spring:message code='html.request.error.type' /></span>");
+				if (description == '') {
+					$("#description").after("<br class='error'><span class='error'><spring:message code='html.request.error.description' /></span>");
 					hasError = true;
 				}
+				
 				
 				return hasError;
 			}
@@ -156,11 +152,19 @@
 	<body>
 		<br>
 		<center>
-			
+			<table width="100%" class="ui-widget-content" border="0" >
+				<tr>
+					<td>
+					<div class=""   align="center" height="63px"> 
+						<img alt="Header" src=<c:out value='${pageContext.request.contextPath}'/>/imgs/crmheader2.jpg width="578px" px height="63px" align=center />
+					</div>
+					</td>
+				</tr>
+			</table>
 			<table width="70%" class="ui-widget-content" border="0">
 				<tr>
 					<td>
-						<c:if test="${sessionScope.Login_Details.type != 'U'}">
+						<c:if test="${sessionScope.Login_Details.type == 'U'}">
 						<a href="mainpage.view">
 						<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" onclick="showTable()" style="cursor:pointer;">
 							<spring:message code="html.mainpage.menu.add"/>
@@ -177,13 +181,13 @@
 						</a>
 					</td>
 					
-					<c:if test="${sessionScope.Login_Details.type != 'A'}">
+					<c:if test="${sessionScope.Login_Details.type == 'A'}">
 					
 						
 						<td>
 							<a href="status.view?requestType=approve">
 							<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
-								<spring:message code="html.mainpage.menu.approve"/> 
+								<spring:message code="html.mainpage.menu.update"/> 
 							</div>
 							</a>
 						</td>
@@ -211,6 +215,10 @@
 								<td align="center"><spring:message code="html.view.page.label.description" /></td>
 								<td align="center"><spring:message code="html.view.page.label.suspectDetails" /></td>
 								<td align="center"><spring:message code="html.view.page.label.notes" /></td>
+								<td align="center"><spring:message code="html.view.page.label.status" /></td>
+								<c:if test="${sessionScope.Login_Details.type == 'U'}">
+								<td align="center"><spring:message code="html.view.page.label.edit" /></td>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody class="cLabel">
@@ -236,12 +244,14 @@
 												<input type="hidden" id="requestId${count}" name="requestId${count}"  value="${requestBean.requestId}"/>
 											</td>
 											<td><span id="status${count}"><c:out value="${requestBean.status}"/></span></td>
-											<td>
-											<c:if test="${ requestBean.status != 'Resolved'}">
-												<img src=<c:out value='${pageContext.request.contextPath}'/>/imgs/edit.png  alt="Edit" onclick="populateValue(${count})"/>
-												<img src=<c:out value='${pageContext.request.contextPath}'/>/imgs/delete.png  alt="Delete" onclick='showDeleteValidaiton(${count})'/>
+											<c:if test="${sessionScope.Login_Details.type == 'U'}">
+												<td>
+													<c:if test="${ requestBean.status != 'Resolved'}">
+														<img src=<c:out value='${pageContext.request.contextPath}'/>/imgs/edit.png  alt="Edit" onclick="populateValue(${count})"/>
+														<img src=<c:out value='${pageContext.request.contextPath}'/>/imgs/delete.png  alt="Delete" onclick='showDeleteValidaiton(${count})'/>
+													</c:if>
+												</td>
 											</c:if>
-											</td>
 										</tr>
 									</c:forEach>
 								</c:when>
@@ -254,7 +264,7 @@
 			</div>
 			
 			
-			<div id="requestEditDiv" name="requestEditDiv">		
+			<div id="requestEditDiv" name="requestEditDiv"  title="Details">		
 				<form name="requestEditForm" id="requestEditForm" method="POST">
 				
 					<table  class="ui-widget-content" border="0">
@@ -280,14 +290,13 @@
 						</tr>
 						
 						<tr>
-							<td align="left"><spring:message code="html.request.label.notes" />:</td>
-							<td><textarea rows="5" cols="30" name="notes" id="notes"></textarea></td>
+							<td align="left"><spring:message code="html.request.label.suspectDetails" />:</td>
+							<td><input type="text" name="status" id="status" maxlength="20" size="20"/></td>
 						</tr>
 						
-						
 						<tr>
-							<td align="left"><spring:message code="html.request.label.type" />:</td>
-							<td>
+							<td align="left"><spring:message code="html.request.label.notes" />:</td>
+							<td><textarea rows="5" cols="30" name="notes" id="notes"></textarea>
 								<input type="text" name="type" id="type" maxlength="20" size="20"/>
 								<input type="hidden" name="requestId" id="requestId" maxlength="20" size="20"/>
 								<input type="submit" name="submit" id="submitButton" class="ui-button" value="<spring:message code="html.global.label.button.submit" />"  style="display: none"/>

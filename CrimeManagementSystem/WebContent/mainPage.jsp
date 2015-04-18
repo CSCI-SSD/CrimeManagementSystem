@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <html>
 	<head>
-		<title><spring:message code="html.mainpage.label.mainpage.title"/> </title>
+		<title>Welcome Page</title>
 		<script type="text/javascript" src="dwr/interface/mainPageControllerdwr.js"></script>
 		<script type="text/javascript" src="dwr/util.js"> </script>
 		<script type="text/javascript" src="dwr/engine.js"></script>
@@ -90,6 +90,11 @@
 				
 				
 			}
+			
+			function loadDialog() {
+				$("#lodingData").dialog('option', 'modal', true).dialog('open');
+			}
+			
 		</script>
 		
 		
@@ -97,22 +102,54 @@
 	<body>
 		<br>
 		<center>
-			
+			<table width="100%" class="ui-widget-content" border="0" >
+				<tr>
+					<td>
+					<div class=""   align="center" height="63px"> 
+						<img alt="Header" src=<c:out value='${pageContext.request.contextPath}'/>/imgs/crmheader2.jpg width="578px" px height="63px" align=center />
+					</div>
+					</td>
+				</tr>
+			</table>			
 			<table width="70%" class="ui-widget-content" border="0">
 				<tr>
 					<td>
+						<c:if test="${sessionScope.Login_Details.type == 'U'}">
 						<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" onclick="showTable()" style="cursor:pointer;">
 							<spring:message code="html.mainpage.menu.add"/>
 						</div>
+						</c:if>
 					</td>
 					
 					<td>
-						<a href="status.view">
-							<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
-								<spring:message code="html.mainpage.menu.status"/>
-							</div>
-						</a>
+						<c:if test="${sessionScope.Login_Details.type == 'U'}">
+							<a href="status.view" onclick="loadDialog()">
+								<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
+									<spring:message code="html.mainpage.menu.status"/>
+								</div>
+							</a>
+						</c:if>
+						<c:if test="${sessionScope.Login_Details.type == 'A'}">
+							<a href="status.view?requestType=approve" onclick="loadDialog()">
+								<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
+									<spring:message code="html.mainpage.menu.status"/>
+								</div>
+							</a>
+						</c:if>
 					</td>
+					
+					<c:if test="${sessionScope.Login_Details.type == 'A'}">
+					
+						
+						<td>
+							<a href="status.view?requestType=approve">
+							<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
+								<spring:message code="html.mainpage.menu.update"/> 
+							</div>
+							</a>
+						</td>
+					
+					</c:if>
 					
 					<td>
 						<a href="logout.view">
@@ -125,11 +162,14 @@
 				</tr>
 			</table>
 			<br><br>
+			<div align="Center">
+				<span>Welcome ${ sessionScope.Login_Details.lastName}</span>&nbsp;&nbsp;&nbsp;
+			</div>
 			<table width="50%" class="ui-widget-content" border="0" id="requestHeader">
 				<tr>
 					<td>
 						<div class="ui-widget-header mainHeader" id="pageHeader" name="pageHeader" width="50%">
-							<spring:message code="html.request.page.title"/>
+							Add Complaint
 						</div>
 					</td>
 				</tr>

@@ -234,7 +234,7 @@ public class ServiceImpl implements Service {
 		try {
 			connection = dataSource.getConnection();
 			statement = connection.createStatement();
-			String query = "select * from  CRIMEREQUEST where  EMPLOYEEID ";
+			String query = "select * from  CRIMEREQUEST ";
 			ResultSet rs = statement.executeQuery(query);
 			requestBeans = new ArrayList<RequestBean>();
 			while (rs.next()) {
@@ -251,6 +251,7 @@ public class ServiceImpl implements Service {
 			}
 			
 		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
 		} finally {
 			if (connection != null) {
 				try {

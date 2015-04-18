@@ -51,8 +51,13 @@
 	BACKGROUND-COLOR: #FCBD5E;
 	}
 </style>
+		<script type="text/javascript">
 
-
+			function loadDialog() {
+				$("#lodingData").dialog('option', 'modal', true).dialog('open');
+			}
+			
+		</script>
 
 
 <div id="lodingData" title="Loading Data" align="center">
@@ -65,7 +70,14 @@
 		<td>
 		<div class="ui-widget-header mainHeader" id="pageFooter" name="pageFooter"  >
 			<spring:message code="html.global.label.footer"/>
+			<br>
+			Office : 402 507 6594 &nbsp; &nbsp;  
 		</div>
+		</td>
+		<td >
+			<div class="ui-widget-header mainHeader" id="pageFooter" name="pageFooter"  >
+			<a href="Contactus.jsp">Contact Us</a><br>&nbsp;
+			</div>
 		</td>
 	</tr>
 </table>		
