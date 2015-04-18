@@ -25,7 +25,8 @@ public class DeleteRequestController extends SystemAbstractController {
 		RequestBean requestBean = new RequestBean();
 		
 		
-		String requestID = request.getParameter("requestId");
+		String requestID = request.getParameter("deleterequestId");
+		String typeOfUser = request.getParameter("typeOfUser");
 		Integer requestIDInt = null;
 		if (requestID != null) {
 			try {
@@ -41,7 +42,12 @@ public class DeleteRequestController extends SystemAbstractController {
 			request.setAttribute(SystemConstants.MESSAGE, SystemConstants.SUCESS_DELETING_REQUEST);
 		}
 		ModelAndView modelAndView = new ModelAndView("viewstatus");
-		request.setAttribute("statusList", service.getCrimeDetailsUser(loginBean.getUserName()));
+		if (typeOfUser != null && typeOfUser.equalsIgnoreCase(SystemConstants.ROLE_ADMIN)) {
+			request.setAttribute("statusList", service.getCrimeDetailsAdmin());
+		} else {
+			request.setAttribute("statusList", service.getCrimeDetailsUser(loginBean.getUserName()));
+		}
+		
 		
 		return modelAndView;
 	}

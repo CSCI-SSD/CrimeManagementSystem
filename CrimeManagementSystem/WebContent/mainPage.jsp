@@ -100,7 +100,6 @@
 		
 	</head>
 	<body>
-		<br>
 		<center>
 			<table width="100%" class="ui-widget-content" border="0" >
 				<tr>
@@ -130,7 +129,7 @@
 							</a>
 						</c:if>
 						<c:if test="${sessionScope.Login_Details.type == 'A'}">
-							<a href="status.view?requestType=approve" onclick="loadDialog()">
+							<a href="status.view?requestType=approve&from=View" onclick="loadDialog()">
 								<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
 									<spring:message code="html.mainpage.menu.status"/>
 								</div>

@@ -45,7 +45,6 @@
 			 	  	width: 460,
 			 	  	buttons: {
 				 	  	Delete: function() {
-				 	  		alert(document.getElementById("deleterequestId").value);
 		                	var ctx = "${pageContext.request.contextPath}"+"/deleterequest.view";
 		   					document.getElementById("deleteForm").action = ctx;
 		   					document.getElementById("deleteFormsubmitButton").click();
@@ -53,6 +52,7 @@
 		                
 		                Cancel : function() {
 		                	document.getElementById("deleterequestId").value = '';
+		                	document.getElementById("typeOfUser").value = '';
 		                	$( this ).dialog( "close" );
 		                }
 			        }
@@ -64,7 +64,7 @@
 				if (message=='Updated') {
 					$("#saveSucessfully").dialog('option', 'modal', true).dialog('open');
 				} else if (message == 'Deleted') {
-					
+					$("#deletedSucessfully").dialog('option', 'modal', true).dialog('open');
 				}
 				
 				
@@ -100,7 +100,7 @@
 				document.getElementById("requestId").value = document.getElementById("requestId"+row).value;
 				document.getElementById("notes").value = document.getElementById("notes"+row).innerHTML;
 				document.getElementById("status").value = document.getElementById("status"+row).innerHTML;
-				
+				document.getElementById("type").value = "${sessionScope.Login_Details.type}";
 				 $("#crimedate").val(document.getElementById("crimedate"+row).innerHTML);
 				
 				$("#requestEditDiv").dialog('option', 'modal', true).dialog('open');
@@ -114,6 +114,7 @@
 				document.getElementById("notes").value = "";
 				document.getElementById("status").value = "";
 				document.getElementById("requestId").value = "";
+				document.getElementById("type").value = "";
 			}
 			
 			function validate() {
@@ -143,6 +144,7 @@
 			
 			function showDeleteValidaiton(row) {
 				document.getElementById("deleterequestId").value = document.getElementById("requestId"+row).value;
+				document.getElementById("typeOfUser").value = "${sessionScope.Login_Details.type}";
 				$("#deleteValidationDiv").dialog('option', 'modal', true).dialog('open');
 			}
 		</script>
@@ -150,7 +152,6 @@
 		
 	</head>
 	<body>
-		<br>
 		<center>
 			<table width="100%" class="ui-widget-content" border="0" >
 				<tr>
@@ -165,20 +166,27 @@
 				<tr>
 					<td>
 						<c:if test="${sessionScope.Login_Details.type == 'U'}">
-						<a href="mainpage.view">
 						<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" onclick="showTable()" style="cursor:pointer;">
 							<spring:message code="html.mainpage.menu.add"/>
 						</div>
-						</a>
 						</c:if>
 					</td>
 					
 					<td>
-						<a href="status.view">
-							<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
-								<spring:message code="html.mainpage.menu.status"/>
-							</div>
-						</a>
+						<c:if test="${sessionScope.Login_Details.type == 'U'}">
+							<a href="status.view" onclick="loadDialog()">
+								<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
+									<spring:message code="html.mainpage.menu.status"/>
+								</div>
+							</a>
+						</c:if>
+						<c:if test="${sessionScope.Login_Details.type == 'A'}">
+							<a href="status.view?requestType=approve&from=View" onclick="loadDialog()">
+								<div class="ui-widget-header mainHeader pointer" id="pageHeadermenu" name="pageHeader" width="50%" style="cursor:pointer;">
+									<spring:message code="html.mainpage.menu.status"/>
+								</div>
+							</a>
+						</c:if>
 					</td>
 					
 					<c:if test="${sessionScope.Login_Details.type == 'A'}">
@@ -271,7 +279,7 @@
 						
 						<tr>
 							<td align="left"><spring:message code="html.request.label.crimedate" />:</td>
-							<td><input type="date" name="crimedate" id="v" maxlength="20" size="20"/></td>
+							<td><input type="date" name="crimedate" id="crimedate" maxlength="20" size="20"/></td>
 						</tr>
 						
 						
@@ -286,14 +294,20 @@
 						</tr>
 						
 						<tr>
-							<td align="left"><spring:message code="html.request.label.suspectDetails" />:</td>
-							<td><input type="text" name="status" id="status" maxlength="20" size="20"/></td>
+							<td align="left"><spring:message code="html.request.label.status" />:</td>
+							<td>
+								<select name="status" id="status" >
+								    <option value="Initial">Initial</option>
+								    <option value="Inprogress">In Progress</option>
+								    <option value="Resolved">Resolved</option>
+								</select>
+							</td>
 						</tr>
 						
 						<tr>
 							<td align="left"><spring:message code="html.request.label.notes" />:</td>
 							<td><textarea rows="5" cols="30" name="notes" id="notes"></textarea>
-								<input type="text" name="type" id="type" maxlength="20" size="20"/>
+								<input type="hidden" name="type" id="type" maxlength="20" size="20"/>
 								<input type="hidden" name="requestId" id="requestId" maxlength="20" size="20"/>
 								<input type="submit" name="submit" id="submitButton" class="ui-button" value="<spring:message code="html.global.label.button.submit" />"  style="display: none"/>
 							</td>
@@ -315,6 +329,7 @@
 			 	 <p><span class="ui-icon ui-icon-alert"></span><spring:message code="html.global.label.delete.validation"/></p>
 			 	 <form name="deleteForm" id="deleteForm" method="POST">
 			 	 	<input type="hidden" name="deleterequestId" id="deleterequestId" maxlength="20" size="20"/>
+			 	 	<input type="hidden" name="typeOfUser" id="typeOfUser" maxlength="20" size="20"/>
 				 	<input type="submit" name="deleteFormsubmitButton" id="deleteFormsubmitButton" class="ui-button" value="<spring:message code="html.global.label.button.submit" />"  style="display: none"/>
 			 	 </form>
 			 </div>

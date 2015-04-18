@@ -43,17 +43,17 @@ public class ComplintController extends SystemAbstractController {
 			requestBean.setNotes("");
 		}
 		requestBean.setRequestId(requestIDInt);
-		
+		requestBean.setStatus(SystemConstants.USER_STATUS);
 		if (requestIDInt != null) {
 			requestBean.setNotes(request.getParameter("notes"));
 			
 			if (loginBean.getType().equals(SystemConstants.ROLE_ADMIN)) {
-				approve = request.getParameter("approve");
-				if (approve != null  && approve.equals("accept")) {
-					requestBean.setStatus(SystemConstants.APPROVE);
-				} else if (approve != null  && approve.equals("decline")){
-					requestBean.setStatus(SystemConstants.NOT_APPROVE);
-				}
+				approve = request.getParameter("status");
+				if (approve != null  && approve.equals(SystemConstants.INPROGRESS)) {
+					requestBean.setStatus(SystemConstants.INPROGRESS);
+				} else if (approve != null  && approve.equals(SystemConstants.RESOLVED)){
+					requestBean.setStatus(SystemConstants.RESOLVED);
+				} 
 			}
 			
 			status = service.updateRequest(requestBean);
@@ -72,11 +72,11 @@ public class ComplintController extends SystemAbstractController {
 			modelAndView = new ModelAndView("viewstatus");
 			request.setAttribute(SystemConstants.MESSAGE, SystemConstants.SUCESS_UPDATING_REQUEST);
 			approve = request.getParameter("approve");
-			if (approve != null  && approve.equals("accept")) {
+			if (loginBean.getType().equals(SystemConstants.ROLE_ADMIN)) {
 				modelAndView = new ModelAndView("approvestatus");
 				request.setAttribute("statusList", service.getCrimeDetailsAdmin());
-			} else if (approve != null  && approve.equals("decline")){
-				modelAndView = new ModelAndView("approvestatus");
+			} else {
+				modelAndView = new ModelAndView("viewstatus");
 				request.setAttribute("statusList",service.getCrimeDetailsUser(loginBean.getUserName()));
 			}
 			
@@ -86,12 +86,12 @@ public class ComplintController extends SystemAbstractController {
 			
 			modelAndView = new ModelAndView("viewstatus");
 			request.setAttribute(SystemConstants.MESSAGE, SystemConstants.UNSUCESS_UPDATING_REQUEST);
-			approve = request.getParameter("approve");
-			if (approve != null  && approve.equals("accept")) {
+			approve = request.getParameter("status");
+			if (loginBean.getType().equals(SystemConstants.ROLE_ADMIN)) {
 				modelAndView = new ModelAndView("approvestatus");
 				request.setAttribute("statusList", service.getCrimeDetailsAdmin());
-			} else if (approve != null  && approve.equals("decline")){
-				modelAndView = new ModelAndView("approvestatus");
+			} else {
+				modelAndView = new ModelAndView("viewstatus");
 				request.setAttribute("statusList", service.getCrimeDetailsUser(loginBean.getUserName()));
 			}
 			

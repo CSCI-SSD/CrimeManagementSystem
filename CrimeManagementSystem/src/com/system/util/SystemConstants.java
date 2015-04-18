@@ -6,7 +6,9 @@ public class SystemConstants {
 
 	public static String REGISTRATION_SUCCESS = "RegistrationUnSuccess";
 
-	public static String APPROVE = "Approved";
+	public static String INPROGRESS = "Inprogress";
+	
+	public static String RESOLVED = "Resolved";
 	
 	public static String NOT_APPROVE = "Decline";
 

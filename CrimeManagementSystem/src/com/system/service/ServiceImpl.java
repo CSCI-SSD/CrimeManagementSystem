@@ -140,6 +140,7 @@ public class ServiceImpl implements Service {
 				requestBean.setCrimedate(rs.getString(4));
 				requestBean.setDescription(rs.getString(5));
 				requestBean.setSuspectDetails(rs.getString(6));
+				requestBean.setNotes(rs.getString(7));
 				requestBean.setStatus(rs.getString(8));
 				requestBeans.add(requestBean);
 			}
@@ -166,14 +167,14 @@ public class ServiceImpl implements Service {
 		
 		try {
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement("UPDATE CRIMEREQUEST SET TYPEOFCRIME=?, CRIMEDATE=?, DESCRIPTION=?, SUSPECTDETAILS=?, NOTES=?, STATUS=? where ERSREQUESTID = ? ");
+			statement = connection.prepareStatement("UPDATE CRIMEREQUEST SET TYPEOFCRIME=?, CRIMEDATE=?, DESCRIPTION=?, SUSPECTDETAILS=?, NOTES=?, STATUS=? where ID = ? ");
 			statement.setString(1, requestBean.getTypeofcrime());
 			statement.setString(2, requestBean.getCrimedate());
 			statement.setString(3, requestBean.getDescription());
 			statement.setString(4, requestBean.getSuspectDetails());
 			statement.setString(5, requestBean.getNotes());
 			statement.setString(6, requestBean.getStatus());
-			statement.setInt(6, requestBean.getRequestId());
+			statement.setInt(7, requestBean.getRequestId());
 			
 			int satus = statement.executeUpdate();
 			if (satus==1) {
@@ -203,7 +204,7 @@ public class ServiceImpl implements Service {
 		
 		try {
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement("DELETE FROM CRIMEREQUEST ID = ? ");
+			statement = connection.prepareStatement("DELETE FROM CRIMEREQUEST WHERE ID = ? ");
 			statement.setInt(1, requestBean.getRequestId());
 			int satus = statement.executeUpdate();
 			if (satus==1) {
@@ -212,6 +213,7 @@ public class ServiceImpl implements Service {
 				return SystemConstants.UNSUCESS_CREATING_REQUEST;
 			}
 		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
 		} finally {
 			if (connection != null) {
 				try {
@@ -233,6 +235,7 @@ public class ServiceImpl implements Service {
 		List<RequestBean> requestBeans = null;
 		try {
 			connection = dataSource.getConnection();
+
 			statement = connection.createStatement();
 			String query = "select * from  CRIMEREQUEST ";
 			ResultSet rs = statement.executeQuery(query);
@@ -244,10 +247,10 @@ public class ServiceImpl implements Service {
 				requestBean.setCrimedate(rs.getString(4));
 				requestBean.setDescription(rs.getString(5));
 				requestBean.setSuspectDetails(rs.getString(6));
+				requestBean.setNotes(rs.getString(7));
 				requestBean.setStatus(rs.getString(8));
 				requestBeans.add(requestBean);
 				
-				requestBeans.add(requestBean);
 			}
 			
 		} catch (SQLException sqlException) {
