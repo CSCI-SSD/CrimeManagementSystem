@@ -59,6 +59,7 @@ public class RegistrationLoginController extends SystemAbstractController {
 		
 		if (satus.equals(SystemConstants.REGISTRATION_SUCCESS)) {
 			modelAndView = new ModelAndView("login");
+			request.setAttribute(SystemConstants.MESSAGE, "registrationSuccess");
 		} else {
 			modelAndView = new ModelAndView("registration");
 			request.setAttribute(SystemConstants.MESSAGE, "registrationFaild");

@@ -97,7 +97,6 @@
 				}
 				
 				if (!hasError) {
-					alert('hello');
 					var ctx = "${pageContext.request.contextPath}"+"/registration.view";
 					document.getElementById("registrationForm").action = ctx;
 					document.getElementById("submitButton").click();

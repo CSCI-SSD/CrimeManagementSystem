@@ -27,11 +27,25 @@
 			 	  	  
 			 	});
 				
+				$("#registrationSuccess").dialog({         
+			 		autoOpen: false,         
+			 		modal: true,
+			 	  	width: 460,
+			 	  	buttons: {
+				 	  	Ok: function() {
+		                    $(this).dialog( "close" );
+		                }
+			        }
+			 	  	  
+			 	});
+				
 				
 				var message = "${message}";
 				
 				if (message=='Invalied Login') {
 					$("#invaliedLogin").dialog('option', 'modal', true).dialog('open');
+				} else if (message=='registrationSuccess') {
+					$("#registrationSuccess").dialog('option', 'modal', true).dialog('open');
 				}
 			 	
 			});
@@ -83,6 +97,7 @@
 					<td colspan="2" class="topCell" >
 						<span > CRIME MANAGEMENT was established by a group of current and retired law enforcement officials,
 						<br> private citizens and security specialist. &nbsp; This for the all people for the security purpose.</span>
+						<img src=<c:out value='${pageContext.request.contextPath}'/>/imgs/crm.png  align=center />
 					</td>
 				</tr>
 				<tr>
@@ -145,6 +160,10 @@
 			
 			<div id="invaliedLogin" title="Message">  
 			 	 <p><span class="ui-icon ui-icon-alert"></span><spring:message code="html.login.label.invaliedlogin" /></p>
+			 </div>
+			 
+			 <div id="registrationSuccess" title="Message">  
+			 	 <p><span class="ui-icon ui-icon-alert"></span>Registration Successful </p>
 			 </div>
 			
 		</center>>
